@@ -1,0 +1,68 @@
+CREATE DATABASE ProvaDB
+USE ProvaDB
+
+-- creating tables
+CREATE TABLE Aluno
+(
+	Id INT IDENTITY PRIMARY KEY,
+	Nome VARCHAR(45) NOT NULL,
+	Cpf VARCHAR(11) NOT NULL,
+	Data_nasc DATE NOT NULL
+)
+
+CREATE TABLE Professor
+(
+	Id INT IDENTITY PRIMARY KEY,
+	Nome VARCHAR(45) NOT NULL,
+	Cpf VARCHAR(11) NOT NULL
+)
+
+CREATE TABLE Curso
+(
+	Id INT IDENTITY PRIMARY KEY,
+	Nome VARCHAR(45) NOT NULL,
+	Ativo BIT DEFAULT 1
+)
+
+CREATE TABLE Disciplina
+(
+	Id INT IDENTITY PRIMARY KEY,
+	Nome VARCHAR(45) NOT NULL,
+	Ativo BIT DEFAULT 1
+)
+
+CREATE TABLE DisciplinaXCurso
+(
+	Id INT IDENTITY PRIMARY KEY,
+	FK_IdCurso INT NOT NULL,
+	FK_IdDisciplina INT NOT NULL,
+	Ativo BIT DEFAULT 1,
+	FOREIGN KEY(FK_IdCurso) REFERENCES Curso(Id),
+	FOREIGN KEY(FK_IdDisciplina) REFERENCES Disciplina(Id)
+)
+
+CREATE TABLE Turma
+(
+	Id INT IDENTITY PRIMARY KEY,
+	FK_IdAluno INT NOT NULL,
+	FK_IdProfessor INT NOT NULL,
+	FK_IdDisciplinaXCurso INT NOT NULL,
+	Nota1 FLOAT,
+	Nota2 FLOAT,
+	Nota3 FLOAT,
+	Nota4 FLOAT,
+	Notafinal FLOAT,
+	Ativo BIT DEFAULT 1,
+	FOREIGN KEY(FK_IdAluno) REFERENCES Aluno(Id),
+	FOREIGN KEY(FK_IdProfessor) REFERENCES Professor(Id),
+	FOREIGN KEY(FK_IdDisciplinaXCurso) REFERENCES DisciplinaXCurso(Id)
+)
+
+CREATE TABLE Pagamentos
+(
+	Id INT IDENTITY PRIMARY KEY,
+	FK_IdAluno INT NOT NULL,
+	Boleto DATE NOT NULL,
+	Situacao VARCHAR(10),
+	CHECK(Situacao = 'pendente' OR Situacao = 'pago' OR Situacao = 'em atraso')
+)
